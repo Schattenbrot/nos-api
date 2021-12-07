@@ -13,9 +13,9 @@ Use it *kappa*
 ## Roadmap
 
 1. Full CRUD for weapons:
-  - Create (champion weapon field missing)
+  - Create (implemented)
   - Get all weapons (implemented)
-  - Get all weapons based on classtype (classtype is missing ...uwuff)
+  - Get all weapons based on classtype
   - Get a specific weapon by id
   - Update a weapon by id
   - Delete a weapon by id
