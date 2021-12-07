@@ -54,3 +54,29 @@ func (m *DBModel) FindAllWeapons() ([]*Weapon, error) {
 
 	return weapons, nil
 }
+
+func (m *DBModel) FindAllWeaponsByProfession(profession string) ([]*Weapon, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	collection := m.DB.Collection("weapons")
+
+	// filter := *options.Find(Weapon{Profession: profession})
+	// filter := bson.D{{"profession", profession}}
+	filter := Weapon{Profession: profession}
+
+	cursor, err := collection.Find(ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+
+	var weapons []*Weapon
+
+	for cursor.Next(ctx) {
+		var weapon Weapon
+		cursor.Decode(&weapon)
+		weapons = append(weapons, &weapon)
+	}
+
+	return weapons, nil
+}

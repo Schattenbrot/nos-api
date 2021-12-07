@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/Schattenbrot/nos-api/models"
+	"github.com/julienschmidt/httprouter"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
@@ -49,6 +50,22 @@ func (app *application) findAllWeapons(w http.ResponseWriter, r *http.Request) {
 	}
 
 	err = app.writeJSON(w, http.StatusOK, weapons, "weapons")
+	if err != nil {
+		app.logger.Println(err)
+	}
+}
+
+func (app *application) findAllWeaponsByProfession(w http.ResponseWriter, r *http.Request) {
+	params := httprouter.ParamsFromContext(r.Context())
+
+	profession := params.ByName("profession")
+
+	weapon, err := app.models.DB.FindAllWeaponsByProfession(profession)
+	if err != nil {
+		app.logger.Println(err)
+	}
+
+	err = app.writeJSON(w, http.StatusOK, weapon, "weapon")
 	if err != nil {
 		app.logger.Println(err)
 	}

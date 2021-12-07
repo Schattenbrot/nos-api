@@ -15,7 +15,7 @@ Use it *kappa*
 1. Full CRUD for weapons:
   - Create (implemented)
   - Get all weapons (implemented)
-  - Get all weapons based on classtype
+  - Get all weapons based on profession (implemented)
   - Get a specific weapon by id
   - Update a weapon by id
   - Delete a weapon by id
