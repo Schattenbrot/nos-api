@@ -28,7 +28,7 @@ Use it *kappa*
   - Update a fairy by id
   - Delete a fairy by id
 3. Savety (login required)
-  1. Thinking about GraphQL O.o worth or not worth?
+  - Thinking about GraphQL O.o worth or not worth?
 4. Full CRUD for armor:
   - Same as weapons ... just with armor
 5. Full CRUD for accessories:
