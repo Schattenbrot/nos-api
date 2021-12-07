@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  api:
+    build: .
+    ports:
+      - '4000:4000'
+    volumes:
+      - '.:/go/src/app'
+  nos-api-db:
+    image: mongo
+    ports:
+      - '27017:27017'
+    volumes:
+      - db-data:/data/db
+
+volumes:
+  db-data:
