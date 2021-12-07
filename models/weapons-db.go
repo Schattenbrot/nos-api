@@ -80,3 +80,23 @@ func (m *DBModel) FindAllWeaponsByProfession(profession string) ([]*Weapon, erro
 
 	return weapons, nil
 }
+
+func (m *DBModel) FindOneWeaponById(id primitive.ObjectID) (*Weapon, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	collection := m.DB.Collection("weapons")
+
+	// filter := *options.Find(Weapon{Profession: profession})
+	// filter := bson.D{{"profession", profession}}
+	filter := Weapon{ID: id}
+
+	var weapon Weapon
+
+	err := collection.FindOne(ctx, filter).Decode(&weapon)
+	if err != nil {
+		return nil, err
+	}
+
+	return &weapon, nil
+}

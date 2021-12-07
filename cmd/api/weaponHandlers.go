@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
 
 	"github.com/Schattenbrot/nos-api/models"
@@ -60,7 +61,28 @@ func (app *application) findAllWeaponsByProfession(w http.ResponseWriter, r *htt
 
 	profession := params.ByName("profession")
 
-	weapon, err := app.models.DB.FindAllWeaponsByProfession(profession)
+	weapons, err := app.models.DB.FindAllWeaponsByProfession(profession)
+	if err != nil {
+		app.logger.Println(err)
+	}
+
+	err = app.writeJSON(w, http.StatusOK, weapons, "weapons")
+	if err != nil {
+		app.logger.Println(err)
+	}
+}
+
+func (app *application) findOneWeaponById(w http.ResponseWriter, r *http.Request) {
+	params := httprouter.ParamsFromContext(r.Context())
+
+	id, err := primitive.ObjectIDFromHex(params.ByName("id"))
+	if err != nil {
+		app.logger.Println(errors.New("invalid id parameter"))
+		app.errorJSON(w, err)
+		return
+	}
+
+	weapon, err := app.models.DB.FindOneWeaponById(id)
 	if err != nil {
 		app.logger.Println(err)
 	}
