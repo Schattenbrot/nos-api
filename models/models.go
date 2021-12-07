@@ -39,6 +39,7 @@ type WeaponPhysical struct {
 type Weapon struct {
 	ID            primitive.ObjectID `json:"_id,omitempty" bson:"_id,omitempty"`
 	Level         int                `json:"level,omitempty" bson:"level,omitempty"`
+	ChampionLevel bool               `json:"championLevel,omitempty" bson:"championLevel,omitempty"`
 	Name          string             `json:"name,omitempty" bson:"name,omitempty"`
 	Image         string             `json:"image,omitempty" bson:"image,omitempty"`
 	Damage        *WeaponDamage      `json:"damage,omitempty" bson:"damage,omitempty"`
