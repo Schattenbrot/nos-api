@@ -28,7 +28,7 @@ Use it *kappa*
   - Update a fairy by id (implemented)
   - Delete a fairy by id (implemented)
 3. Miscellaneous
-  - Move handlers into handlers-module for better readability. (no clue, so moved to contributing for now)
+  - Move handlers into handlers-module for better readability. (done, but no receiver anymore, moved config into config-module)
   - httprouter to chi (done)
   - Fix response messages to be more schemey.
   - validation check
@@ -63,6 +63,8 @@ DELETE will return the number of deleted entries.
 I have no clue how I can make this cmd/api thing more readable since I'm using receivers to pass around the app configuration which I personally like.
 
 If someone got an idea for that I would be happy to hear about it.
+
+I did it ... but without receivers. If someone got an idea for a better solution I'm even more happy to hear about it. :3
 
 ## License
 
