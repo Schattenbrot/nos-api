@@ -1,4 +1,4 @@
-package main
+package handlers
 
 import (
 	"encoding/json"
@@ -6,7 +6,7 @@ import (
 )
 
 // writeJSON wraps the data in a custom wrapper and writes it to the page.
-func (app *application) writeJSON(w http.ResponseWriter, status int, data interface{}, wrap string) error {
+func writeJSON(w http.ResponseWriter, status int, data interface{}, wrap string) error {
 	wrapper := make(map[string]interface{})
 
 	wrapper[wrap] = data
@@ -24,7 +24,7 @@ func (app *application) writeJSON(w http.ResponseWriter, status int, data interf
 }
 
 // errorJSON is the wrapper for an error, if one occurs.
-func (app *application) errorJSON(w http.ResponseWriter, err error, status ...int) {
+func errorJSON(w http.ResponseWriter, err error, status ...int) {
 	statusCode := http.StatusBadRequest
 	if len(status) > 0 {
 		statusCode = status[0]
@@ -36,5 +36,5 @@ func (app *application) errorJSON(w http.ResponseWriter, err error, status ...in
 
 	theError := jsonError{Message: err.Error()}
 
-	app.writeJSON(w, statusCode, theError, "error")
+	writeJSON(w, statusCode, theError, "error")
 }

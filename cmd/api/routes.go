@@ -1,11 +1,12 @@
 package main
 
 import (
+	"github.com/Schattenbrot/nos-api/handlers"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/cors"
 )
 
-func (app *application) chiRoutes() *chi.Mux {
+func chiRoutes() *chi.Mux {
 	r := chi.NewRouter()
 
 	r.Use(cors.Handler(cors.Options{
@@ -13,34 +14,34 @@ func (app *application) chiRoutes() *chi.Mux {
 		MaxAge:         300,
 	}))
 
-	r.Get("/", app.findAllWeapons)
+	r.Get("/", handlers.FindAllWeapons)
 
-	r.Get("/status", app.statusHandler)
+	r.Get("/status", handlers.StatusHandler)
 
 	r.Route("/v1", func(r chi.Router) {
 		r.Route("/weapons", func(r chi.Router) {
-			r.Get("/", app.findAllWeapons)
+			r.Get("/", handlers.FindAllWeapons)
 
-			r.Post("/", app.createWeapon)
-			r.Get("/{id}", app.findOneWeaponById)
-			r.Patch("/{id}", app.updateWeaponById)
-			r.Delete("/{id}", app.deleteWeaponById)
+			r.Post("/", handlers.InsertWeapon)
+			r.Get("/{id}", handlers.FindOneWeaponById)
+			r.Patch("/{id}", handlers.UpdateWeaponById)
+			r.Delete("/{id}", handlers.DeleteWeaponById)
 
 			r.Route("/profession", func(r chi.Router) {
-				r.Get("/{profession}", app.findAllWeaponsByProfession)
+				r.Get("/{profession}", handlers.FindAllWeaponsByProfession)
 			})
 		})
 
 		r.Route("/fairies", func(r chi.Router) {
-			r.Get("/", app.findAllFairies)
+			r.Get("/", handlers.FindAllFairies)
 
-			r.Post("/", app.insertFairy)
-			r.Get("/{id}", app.findFairyById)
-			r.Patch("/{id}", app.updateFairyById)
-			r.Delete("/{id}", app.deleteFairyById)
+			r.Post("/", handlers.InsertFairy)
+			r.Get("/{id}", handlers.FindFairyById)
+			r.Patch("/{id}", handlers.UpdateFairyById)
+			r.Delete("/{id}", handlers.DeleteFairyById)
 
 			r.Route("/element", func(r chi.Router) {
-				r.Get("/{element}", app.findAllFairiesByElement)
+				r.Get("/{element}", handlers.FindAllFairiesByElement)
 			})
 		})
 	})

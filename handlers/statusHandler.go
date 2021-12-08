@@ -1,28 +1,30 @@
-package main
+package handlers
 
 import (
 	"encoding/json"
 	"net/http"
+
+	"github.com/Schattenbrot/nos-api/config"
 )
 
 //AppStatus is the type for the applications status.
-type AppStatus struct {
+type appStatus struct {
 	Status      string `json:"status"`
 	Environment string `json:"environment"`
 	Version     string `json:"version"`
 }
 
 // statusHandler is the handler for the appstatus.
-func (app *application) statusHandler(w http.ResponseWriter, r *http.Request) {
-	currentStatus := AppStatus{
+func StatusHandler(w http.ResponseWriter, r *http.Request) {
+	currentStatus := appStatus{
 		Status:      "Available",
-		Environment: app.config.env,
-		Version:     version,
+		Environment: config.Cfg.Env,
+		Version:     config.App.Version,
 	}
 
 	js, err := json.Marshal(currentStatus)
 	if err != nil {
-		app.logger.Println(err)
+		config.App.Logger.Println(err)
 	}
 
 	w.Header().Set("Content-Type", "application/json")
