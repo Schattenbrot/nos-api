@@ -16,9 +16,9 @@ Use it *kappa*
   - Create (implemented)
   - Get all weapons (implemented)
   - Get all weapons based on profession (implemented)
-  - Get a specific weapon by id
-  - Update a weapon by id
-  - Delete a weapon by id
+  - Get a specific weapon by id (implemented)
+  - Update a weapon by id (implemented)
+  - Delete a weapon by id (implemented)
 2. Full CRUD for fairies:
   - Create (implemented)
   - Get all fairies (implemented)

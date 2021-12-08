@@ -92,3 +92,55 @@ func (app *application) findOneWeaponById(w http.ResponseWriter, r *http.Request
 		app.logger.Println(err)
 	}
 }
+
+func (app *application) updateWeaponById(w http.ResponseWriter, r *http.Request) {
+	params := httprouter.ParamsFromContext(r.Context())
+
+	id, err := primitive.ObjectIDFromHex(params.ByName("id"))
+	if err != nil {
+		app.logger.Println(errors.New("invalid id parameter"))
+		app.errorJSON(w, err)
+		return
+	}
+
+	var updateWeapon models.Weapon
+	err = json.NewDecoder(r.Body).Decode(&updateWeapon)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+
+	result, err := app.models.DB.UpdateOneWeaponById(id, updateWeapon)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+
+	app.logger.Println(result)
+
+	err = app.writeJSON(w, http.StatusOK, result, "updated")
+	if err != nil {
+		app.logger.Println(err)
+	}
+}
+
+func (app *application) deleteWeaponById(w http.ResponseWriter, r *http.Request) {
+	params := httprouter.ParamsFromContext(r.Context())
+	id, err := primitive.ObjectIDFromHex(params.ByName("id"))
+	if err != nil {
+		app.logger.Println(errors.New("invalid id parameter"))
+		app.errorJSON(w, err)
+		return
+	}
+
+	result, err := app.models.DB.DeleteWeaponById(id)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+
+	err = app.writeJSON(w, http.StatusOK, result, "deleted")
+	if err != nil {
+		app.logger.Println(err)
+	}
+}

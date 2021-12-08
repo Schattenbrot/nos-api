@@ -53,7 +53,7 @@ func main() {
 	}
 
 	c := cors.New(cors.Options{
-		AllowedMethods: []string{"GET", "POST", "DELETE", "UPDATE"},
+		AllowedMethods: []string{"GET", "POST", "DELETE", "PATCH"},
 	})
 	handler := c.Handler(app.routes())
 

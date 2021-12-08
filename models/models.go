@@ -45,7 +45,7 @@ type Weapon struct {
 	Image         string             `json:"image,omitempty" bson:"image,omitempty"`
 	Damage        *WeaponDamage      `json:"damage,omitempty" bson:"damage,omitempty"`
 	Physical      *WeaponPhysical    `json:"physical,omitempty" bson:"physical,omitempty"`
-	Concentration int                `json:"concentration,omitempty" bson:"concentration, omitempty"`
+	Concentration int                `json:"concentration,omitempty" bson:"concentration,omitempty"`
 	Effects       []string           `json:"effects,omitempty" bson:"effects,omitempty"`
 	HowToGet      []string           `json:"howToGet,omitempty" bson:"howToGet,omitempty"`
 }

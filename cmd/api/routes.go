@@ -16,6 +16,8 @@ func (app *application) routes() *httprouter.Router {
 	router.HandlerFunc(http.MethodPost, "/v1/weapons", app.createWeapon)
 	router.HandlerFunc(http.MethodGet, "/v1/weapons/profession/:profession", app.findAllWeaponsByProfession)
 	router.HandlerFunc(http.MethodGet, "/v1/weapons/id/:id", app.findOneWeaponById)
+	router.HandlerFunc(http.MethodPatch, "/v1/weapons/:id", app.updateWeaponById)
+	router.HandlerFunc(http.MethodDelete, "/v1/weapons/:id", app.deleteWeaponById)
 
 	router.HandlerFunc(http.MethodGet, "/v1/fairies", app.findAllFairies)
 	router.HandlerFunc(http.MethodPost, "/v1/fairies", app.insertFairy)
