@@ -28,7 +28,7 @@ func InsertWeapon(w http.ResponseWriter, r *http.Request) {
 
 	id, err := config.App.Models.DB.InsertWeapon(weapon)
 	if err != nil {
-		errorJSON(w, err)
+		errorJSON(w, err, http.StatusInternalServerError)
 		return
 	}
 
@@ -37,9 +37,9 @@ func InsertWeapon(w http.ResponseWriter, r *http.Request) {
 		ID: id,
 	}
 
-	err = writeJSON(w, http.StatusOK, ok, "response")
+	err = writeJSON(w, http.StatusCreated, ok, "response")
 	if err != nil {
-		errorJSON(w, err)
+		errorJSON(w, err, http.StatusInternalServerError)
 		return
 	}
 }
@@ -48,11 +48,20 @@ func InsertWeapon(w http.ResponseWriter, r *http.Request) {
 func FindAllWeapons(w http.ResponseWriter, r *http.Request) {
 	weapons, err := config.App.Models.DB.FindAllWeapons()
 	if err != nil {
+		errorJSON(w, err, http.StatusInternalServerError)
 		config.App.Logger.Println(err)
+	}
+
+	if weapons == nil {
+		err = errors.New("the items do not exist")
+		errorJSON(w, err, http.StatusNotFound)
+		config.App.Logger.Println(err)
+		return
 	}
 
 	err = writeJSON(w, http.StatusOK, weapons, "weapons")
 	if err != nil {
+		errorJSON(w, err, http.StatusInternalServerError)
 		config.App.Logger.Println(err)
 	}
 }
@@ -62,11 +71,20 @@ func FindAllWeaponsByProfession(w http.ResponseWriter, r *http.Request) {
 
 	weapons, err := config.App.Models.DB.FindAllWeaponsByProfession(profession)
 	if err != nil {
+		errorJSON(w, err, http.StatusInternalServerError)
 		config.App.Logger.Println(err)
+	}
+
+	if weapons == nil {
+		err = errors.New("the items do not exist")
+		errorJSON(w, err, http.StatusNotFound)
+		config.App.Logger.Println(err)
+		return
 	}
 
 	err = writeJSON(w, http.StatusOK, weapons, "weapons")
 	if err != nil {
+		errorJSON(w, err, http.StatusInternalServerError)
 		config.App.Logger.Println(err)
 	}
 }
@@ -81,11 +99,20 @@ func FindOneWeaponById(w http.ResponseWriter, r *http.Request) {
 
 	weapon, err := config.App.Models.DB.FindOneWeaponById(id)
 	if err != nil {
+		errorJSON(w, err, http.StatusNotFound)
 		config.App.Logger.Println(err)
+	}
+
+	if weapon == nil {
+		err = errors.New("the item does not exist")
+		errorJSON(w, err, http.StatusNotFound)
+		config.App.Logger.Println(err)
+		return
 	}
 
 	err = writeJSON(w, http.StatusOK, weapon, "weapon")
 	if err != nil {
+		errorJSON(w, err, http.StatusInternalServerError)
 		config.App.Logger.Println(err)
 	}
 }
@@ -107,12 +134,13 @@ func UpdateWeaponById(w http.ResponseWriter, r *http.Request) {
 
 	result, err := config.App.Models.DB.UpdateOneWeaponById(id, updateWeapon)
 	if err != nil {
-		errorJSON(w, err)
+		errorJSON(w, err, http.StatusInternalServerError)
 		return
 	}
 
 	err = writeJSON(w, http.StatusOK, result, "updated")
 	if err != nil {
+		errorJSON(w, err, http.StatusInternalServerError)
 		config.App.Logger.Println(err)
 	}
 }
@@ -127,12 +155,13 @@ func DeleteWeaponById(w http.ResponseWriter, r *http.Request) {
 
 	result, err := config.App.Models.DB.DeleteWeaponById(id)
 	if err != nil {
-		errorJSON(w, err)
+		errorJSON(w, err, http.StatusInternalServerError)
 		return
 	}
 
-	err = writeJSON(w, http.StatusOK, result, "deleted")
+	err = writeJSON(w, http.StatusNoContent, result, "deleted")
 	if err != nil {
+		errorJSON(w, err, http.StatusInternalServerError)
 		config.App.Logger.Println(err)
 	}
 }

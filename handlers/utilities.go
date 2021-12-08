@@ -18,7 +18,9 @@ func writeJSON(w http.ResponseWriter, status int, data interface{}, wrap string)
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(status)
-	w.Write(js)
+	if status != http.StatusNoContent {
+		w.Write(js)
+	}
 
 	return nil
 }

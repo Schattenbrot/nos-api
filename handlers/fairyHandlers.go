@@ -32,7 +32,7 @@ func InsertFairy(w http.ResponseWriter, r *http.Request) {
 
 	ok := jsonResp{OK: true, ID: id}
 
-	err = writeJSON(w, http.StatusOK, ok, "response")
+	err = writeJSON(w, http.StatusCreated, ok, "response")
 	if err != nil {
 		errorJSON(w, err)
 		return
@@ -44,6 +44,13 @@ func FindAllFairies(w http.ResponseWriter, r *http.Request) {
 	fairies, err := config.App.Models.DB.FindAllFairies()
 	if err != nil {
 		config.App.Logger.Println(err)
+	}
+
+	if fairies == nil {
+		err = errors.New("the items do not exist")
+		errorJSON(w, err, http.StatusNotFound)
+		config.App.Logger.Println(err)
+		return
 	}
 
 	err = writeJSON(w, http.StatusOK, fairies, "fairies")
@@ -58,6 +65,13 @@ func FindAllFairiesByElement(w http.ResponseWriter, r *http.Request) {
 	fairies, err := config.App.Models.DB.FindAllFairiesByElement(element)
 	if err != nil {
 		config.App.Logger.Println(err)
+	}
+
+	if fairies == nil {
+		err = errors.New("the items do not exist")
+		errorJSON(w, err, http.StatusNotFound)
+		config.App.Logger.Println(err)
+		return
 	}
 
 	err = writeJSON(w, http.StatusOK, fairies, "fairies")
@@ -77,6 +91,13 @@ func FindFairyById(w http.ResponseWriter, r *http.Request) {
 	fairy, err := config.App.Models.DB.FindFairyById(id)
 	if err != nil {
 		config.App.Logger.Println(err)
+	}
+
+	if fairy == nil {
+		err = errors.New("the item does not exist")
+		errorJSON(w, err, http.StatusNotFound)
+		config.App.Logger.Println(err)
+		return
 	}
 
 	err = writeJSON(w, http.StatusOK, fairy, "fairy")
