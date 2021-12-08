@@ -51,11 +51,6 @@ func main() {
 		models: models.NewModels(db),
 	}
 
-	// c := cors.New(cors.Options{
-	// 	AllowedMethods: []string{"GET", "POST", "DELETE", "PATCH"},
-	// })
-	// handler := c.Handler(app.routes())
-
 	serve := &http.Server{
 		Addr:         fmt.Sprintf(":%d", cfg.port),
 		Handler:      app.chiRoutes(),
