@@ -10,7 +10,6 @@ import (
 	"time"
 
 	"github.com/Schattenbrot/nos-api/models"
-	"github.com/rs/cors"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -52,14 +51,14 @@ func main() {
 		models: models.NewModels(db),
 	}
 
-	c := cors.New(cors.Options{
-		AllowedMethods: []string{"GET", "POST", "DELETE", "PATCH"},
-	})
-	handler := c.Handler(app.routes())
+	// c := cors.New(cors.Options{
+	// 	AllowedMethods: []string{"GET", "POST", "DELETE", "PATCH"},
+	// })
+	// handler := c.Handler(app.routes())
 
 	serve := &http.Server{
 		Addr:         fmt.Sprintf(":%d", cfg.port),
-		Handler:      handler,
+		Handler:      app.chiRoutes(),
 		IdleTimeout:  time.Minute,
 		ReadTimeout:  10 * time.Second,
 		WriteTimeout: 30 * time.Second,

@@ -3,8 +3,8 @@ module github.com/Schattenbrot/nos-api
 go 1.17
 
 require (
-	github.com/julienschmidt/httprouter v1.3.0
-	github.com/rs/cors v1.8.0
+	github.com/go-chi/chi v1.5.4
+	github.com/go-chi/cors v1.2.0
 	go.mongodb.org/mongo-driver v1.8.0
 )
 

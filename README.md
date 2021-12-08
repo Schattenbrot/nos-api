@@ -29,7 +29,7 @@ Use it *kappa*
   - Delete a fairy by id (implemented)
 3. Miscellaneous
   - Move handlers into handlers-module for better readability. (so no clue, moved to contributing for now)
-  - httprouter to chi
+  - httprouter to chi (done)
   - Fix response messages to be more schemey.
   - validation check
   - Savety (login required)

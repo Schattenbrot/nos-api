@@ -6,7 +6,7 @@ import (
 	"net/http"
 
 	"github.com/Schattenbrot/nos-api/models"
-	"github.com/julienschmidt/httprouter"
+	"github.com/go-chi/chi"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
@@ -57,9 +57,7 @@ func (app *application) findAllWeapons(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) findAllWeaponsByProfession(w http.ResponseWriter, r *http.Request) {
-	params := httprouter.ParamsFromContext(r.Context())
-
-	profession := params.ByName("profession")
+	profession := chi.URLParam(r, "profession")
 
 	weapons, err := app.models.DB.FindAllWeaponsByProfession(profession)
 	if err != nil {
@@ -73,9 +71,7 @@ func (app *application) findAllWeaponsByProfession(w http.ResponseWriter, r *htt
 }
 
 func (app *application) findOneWeaponById(w http.ResponseWriter, r *http.Request) {
-	params := httprouter.ParamsFromContext(r.Context())
-
-	id, err := primitive.ObjectIDFromHex(params.ByName("id"))
+	id, err := primitive.ObjectIDFromHex(chi.URLParam(r, "id"))
 	if err != nil {
 		app.logger.Println(errors.New("invalid id parameter"))
 		app.errorJSON(w, err)
@@ -94,9 +90,7 @@ func (app *application) findOneWeaponById(w http.ResponseWriter, r *http.Request
 }
 
 func (app *application) updateWeaponById(w http.ResponseWriter, r *http.Request) {
-	params := httprouter.ParamsFromContext(r.Context())
-
-	id, err := primitive.ObjectIDFromHex(params.ByName("id"))
+	id, err := primitive.ObjectIDFromHex(chi.URLParam(r, "id"))
 	if err != nil {
 		app.logger.Println(errors.New("invalid id parameter"))
 		app.errorJSON(w, err)
@@ -125,8 +119,7 @@ func (app *application) updateWeaponById(w http.ResponseWriter, r *http.Request)
 }
 
 func (app *application) deleteWeaponById(w http.ResponseWriter, r *http.Request) {
-	params := httprouter.ParamsFromContext(r.Context())
-	id, err := primitive.ObjectIDFromHex(params.ByName("id"))
+	id, err := primitive.ObjectIDFromHex(chi.URLParam(r, "id"))
 	if err != nil {
 		app.logger.Println(errors.New("invalid id parameter"))
 		app.errorJSON(w, err)

@@ -1,30 +1,49 @@
 package main
 
 import (
-	"net/http"
-
-	"github.com/julienschmidt/httprouter"
+	"github.com/go-chi/chi"
+	"github.com/go-chi/cors"
 )
 
-// routes handles all the URL-routing.
-func (app *application) routes() *httprouter.Router {
-	router := httprouter.New()
+func (app *application) chiRoutes() *chi.Mux {
+	r := chi.NewRouter()
 
-	router.HandlerFunc(http.MethodGet, "/status", app.statusHandler)
+	r.Use(cors.Handler(cors.Options{
+		AllowedMethods: []string{"GET", "POST", "DELETE", "PATCH"},
+		MaxAge:         300,
+	}))
 
-	router.HandlerFunc(http.MethodGet, "/v1/weapons", app.findAllWeapons)
-	router.HandlerFunc(http.MethodPost, "/v1/weapons", app.createWeapon)
-	router.HandlerFunc(http.MethodGet, "/v1/weapons/profession/:profession", app.findAllWeaponsByProfession)
-	router.HandlerFunc(http.MethodGet, "/v1/weapons/id/:id", app.findOneWeaponById)
-	router.HandlerFunc(http.MethodPatch, "/v1/weapons/:id", app.updateWeaponById)
-	router.HandlerFunc(http.MethodDelete, "/v1/weapons/:id", app.deleteWeaponById)
+	r.Get("/", app.findAllWeapons)
 
-	router.HandlerFunc(http.MethodGet, "/v1/fairies", app.findAllFairies)
-	router.HandlerFunc(http.MethodPost, "/v1/fairies", app.insertFairy)
-	router.HandlerFunc(http.MethodGet, "/v1/fairies/element/:element", app.findAllFairiesByElement)
-	router.HandlerFunc(http.MethodGet, "/v1/fairies/id/:id", app.findFairyById)
-	router.HandlerFunc(http.MethodPatch, "/v1/fairies/:id", app.updateFairyById)
-	router.HandlerFunc(http.MethodDelete, "/v1/fairies/:id", app.deleteFairyById)
+	r.Get("/status", app.statusHandler)
 
-	return router
+	r.Route("/v1", func(r chi.Router) {
+		r.Route("/weapons", func(r chi.Router) {
+			r.Get("/", app.findAllWeapons)
+
+			r.Post("/", app.createWeapon)
+			r.Get("/{id}", app.findOneWeaponById)
+			r.Patch("/{id}", app.updateWeaponById)
+			r.Delete("/{id}", app.deleteWeaponById)
+
+			r.Route("/profession", func(r chi.Router) {
+				r.Get("/{profession}", app.findAllWeaponsByProfession)
+			})
+		})
+
+		r.Route("/fairies", func(r chi.Router) {
+			r.Get("/", app.findAllFairies)
+
+			r.Post("/", app.insertFairy)
+			r.Get("/{id}", app.findFairyById)
+			r.Patch("/{id}", app.updateFairyById)
+			r.Delete("/{id}", app.deleteFairyById)
+
+			r.Route("/element", func(r chi.Router) {
+				r.Get("/{element}", app.findAllFairiesByElement)
+			})
+		})
+	})
+
+	return r
 }

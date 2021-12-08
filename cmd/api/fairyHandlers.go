@@ -6,7 +6,7 @@ import (
 	"net/http"
 
 	"github.com/Schattenbrot/nos-api/models"
-	"github.com/julienschmidt/httprouter"
+	"github.com/go-chi/chi"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
@@ -52,9 +52,7 @@ func (app *application) findAllFairies(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) findAllFairiesByElement(w http.ResponseWriter, r *http.Request) {
-	params := httprouter.ParamsFromContext(r.Context())
-
-	element := params.ByName("element")
+	element := chi.URLParam(r, "element")
 
 	fairies, err := app.models.DB.FindAllFairiesByElement(element)
 	if err != nil {
@@ -68,9 +66,7 @@ func (app *application) findAllFairiesByElement(w http.ResponseWriter, r *http.R
 }
 
 func (app *application) findFairyById(w http.ResponseWriter, r *http.Request) {
-	params := httprouter.ParamsFromContext(r.Context())
-
-	id, err := primitive.ObjectIDFromHex(params.ByName("id"))
+	id, err := primitive.ObjectIDFromHex(chi.URLParam(r, "id"))
 	if err != nil {
 		app.logger.Println(errors.New("invalid id parameter"))
 		app.errorJSON(w, err)
@@ -89,9 +85,7 @@ func (app *application) findFairyById(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) updateFairyById(w http.ResponseWriter, r *http.Request) {
-	params := httprouter.ParamsFromContext(r.Context())
-
-	id, err := primitive.ObjectIDFromHex(params.ByName("id"))
+	id, err := primitive.ObjectIDFromHex(chi.URLParam(r, "id"))
 	if err != nil {
 		app.logger.Println(errors.New("invalid id parameter"))
 		app.errorJSON(w, err)
@@ -118,9 +112,7 @@ func (app *application) updateFairyById(w http.ResponseWriter, r *http.Request) 
 }
 
 func (app *application) deleteFairyById(w http.ResponseWriter, r *http.Request) {
-	params := httprouter.ParamsFromContext(r.Context())
-
-	id, err := primitive.ObjectIDFromHex(params.ByName("id"))
+	id, err := primitive.ObjectIDFromHex(chi.URLParam(r, "id"))
 	if err != nil {
 		app.logger.Println(errors.New("invalid id parameter"))
 		app.errorJSON(w, err)
