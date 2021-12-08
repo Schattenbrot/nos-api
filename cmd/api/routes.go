@@ -21,6 +21,10 @@ func (app *application) routes() *httprouter.Router {
 
 	router.HandlerFunc(http.MethodGet, "/v1/fairies", app.findAllFairies)
 	router.HandlerFunc(http.MethodPost, "/v1/fairies", app.insertFairy)
+	router.HandlerFunc(http.MethodGet, "/v1/fairies/element/:element", app.findAllFairiesByElement)
+	router.HandlerFunc(http.MethodGet, "/v1/fairies/id/:id", app.findFairyById)
+	router.HandlerFunc(http.MethodPatch, "/v1/fairies/:id", app.updateFairyById)
+	router.HandlerFunc(http.MethodDelete, "/v1/fairies/:id", app.deleteFairyById)
 
 	return router
 }

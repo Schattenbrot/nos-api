@@ -22,12 +22,17 @@ Use it *kappa*
 2. Full CRUD for fairies:
   - Create (implemented)
   - Get all fairies (implemented)
-  - Get all fairies by element
-  - Get all fairies by maxlevel
-  - Get a specific fairy by id
-  - Update a fairy by id
-  - Delete a fairy by id
-3. Savety (login required)
+  - Get all fairies by element (implemented)
+  - Get all fairies by maxlevel (implemented)
+  - Get a specific fairy by id (implemented)
+  - Update a fairy by id (implemented)
+  - Delete a fairy by id (implemented)
+3. Miscellaneous
+  - Move handlers into handlers-module for better readability.
+  - Fix response messages to be more schemey.
+  - httprouter to chi
+  - validation check
+  - Savety (login required)
   - Thinking about GraphQL O.o worth or not worth?
 4. Full CRUD for armor:
   - Same as weapons ... just with armor
@@ -45,6 +50,13 @@ Use it *kappa*
   - Get a specific costume by id
   - Update a costume by id
   - Delete a costume by id
+
+## Response format
+
+Basically using the format described [HERE](https://github.com/cryptlex/rest-api-response-format).
+POST it will return the inserted ObjectID instead of the message.
+UPDATE it will return the number of updated entries.
+DELETE will return the number of deleted entries.
 
 ## License
 
