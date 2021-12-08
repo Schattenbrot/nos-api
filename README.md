@@ -28,9 +28,9 @@ Use it *kappa*
   - Update a fairy by id (implemented)
   - Delete a fairy by id (implemented)
 3. Miscellaneous
-  - Move handlers into handlers-module for better readability.
-  - Fix response messages to be more schemey.
+  - Move handlers into handlers-module for better readability. (so no clue, moved to contributing for now)
   - httprouter to chi
+  - Fix response messages to be more schemey.
   - validation check
   - Savety (login required)
   - Thinking about GraphQL O.o worth or not worth?
@@ -57,6 +57,12 @@ Basically using the format described [HERE](https://github.com/cryptlex/rest-api
 POST it will return the inserted ObjectID instead of the message.
 UPDATE it will return the number of updated entries.
 DELETE will return the number of deleted entries.
+
+## Contributing
+
+I have so no clue how I can make this cmd/api thing more readable since I'm using receivers to pass around the app configuration which I personally like.
+
+If someone got an idea for that I would be happy to hear about it.
 
 ## License
 
