@@ -2,7 +2,6 @@ package models
 
 import (
 	"context"
-	"log"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -110,60 +109,9 @@ func (m *DBModel) UpdateOneWeaponById(id primitive.ObjectID, weapon Weapon) (int
 	defer cancel()
 
 	collection := m.DB.Collection("weapons")
-	log.Println("Test:", id)
 
-	filter := Weapon{ID: id}
+	update := bson.M{"$set": weapon}
 
-	var oldWeapon Weapon
-
-	err := collection.FindOne(ctx, filter).Decode(&oldWeapon)
-	if err != nil {
-		log.Println("uwuff")
-		return 0, err
-	}
-
-	if oldWeapon.Level != weapon.Level {
-		oldWeapon.Level = weapon.Level
-	}
-	if weapon.ChampionLevel != oldWeapon.ChampionLevel {
-		oldWeapon.ChampionLevel = weapon.ChampionLevel
-	}
-	if weapon.Name != oldWeapon.Name {
-		oldWeapon.Name = weapon.Name
-	}
-	if weapon.Profession != oldWeapon.Profession {
-		oldWeapon.Profession = weapon.Profession
-	}
-	if weapon.Image != oldWeapon.Image {
-		oldWeapon.Image = weapon.Image
-	}
-	if weapon.Damage != nil {
-		if weapon.Damage.Max != oldWeapon.Damage.Max {
-			oldWeapon.Damage.Max = weapon.Damage.Max
-		}
-		if weapon.Damage.Min != oldWeapon.Damage.Min {
-			oldWeapon.Damage.Min = weapon.Damage.Min
-		}
-	}
-	if weapon.Physical != nil {
-		if weapon.Physical.HitRate != oldWeapon.Physical.HitRate {
-			oldWeapon.Physical.HitRate = weapon.Physical.HitRate
-		}
-		if weapon.Physical.CritChance != oldWeapon.Physical.CritChance {
-			oldWeapon.Physical.CritChance = weapon.Physical.CritChance
-		}
-		if weapon.Physical.Crit != oldWeapon.Physical.Crit {
-			oldWeapon.Physical.Crit = weapon.Physical.Crit
-		}
-	}
-	if weapon.Concentration != oldWeapon.Concentration {
-		oldWeapon.Concentration = weapon.Concentration
-	}
-	if len(weapon.HowToGet) != len(oldWeapon.HowToGet) {
-		oldWeapon.HowToGet = weapon.HowToGet
-	}
-
-	update := bson.M{"$set": oldWeapon}
 	result, err := collection.UpdateByID(ctx, id, update)
 	if err != nil {
 		return 0, err
