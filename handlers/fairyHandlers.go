@@ -3,10 +3,12 @@ package handlers
 import (
 	"encoding/json"
 	"errors"
+	"html/template"
 	"net/http"
 
 	"github.com/Schattenbrot/nos-api/config"
 	"github.com/Schattenbrot/nos-api/models"
+	"github.com/Schattenbrot/nos-api/validator"
 	"github.com/go-chi/chi"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -17,6 +19,21 @@ func InsertFairy(w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(&fairy)
 	if err != nil {
 		errorJSON(w, err)
+		return
+	}
+
+	// Validation
+	err = validator.FairyValidation(fairy)
+	if err != nil {
+		errorJSON(w, err)
+		return
+	}
+	// Escape strings
+	for i := 0; i < len(fairy.Effects); i++ {
+		fairy.Effects[i] = template.HTMLEscapeString(fairy.Effects[i])
+	}
+	for i := 0; i < len(fairy.HowToGet); i++ {
+		fairy.HowToGet[i] = template.HTMLEscapeString(fairy.HowToGet[i])
 	}
 
 	type jsonResp struct {
@@ -61,6 +78,12 @@ func FindAllFairies(w http.ResponseWriter, r *http.Request) {
 
 func FindAllFairiesByElement(w http.ResponseWriter, r *http.Request) {
 	element := chi.URLParam(r, "element")
+	if element != "fire" && element != "water" && element != "light" && element != "shadow" {
+		err := errors.New("invalid element parameter")
+		errorJSON(w, err, http.StatusBadRequest)
+		config.App.Logger.Println(err)
+		return
+	}
 
 	fairies, err := config.App.Models.DB.FindAllFairiesByElement(element)
 	if err != nil {
