@@ -2,6 +2,7 @@ package models
 
 import (
 	"context"
+	"errors"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -117,6 +118,11 @@ func (m *DBModel) UpdateOneWeaponById(id primitive.ObjectID, weapon Weapon) (int
 		return 0, err
 	}
 
+	if int(result.ModifiedCount) == 0 {
+		err = errors.New("not found")
+		return 0, err
+	}
+
 	return int(result.ModifiedCount), nil
 }
 
@@ -131,6 +137,10 @@ func (m *DBModel) DeleteWeaponById(id primitive.ObjectID) (int, error) {
 	result, err := collection.DeleteOne(ctx, filter)
 	if err != nil {
 		return 0, err
+	}
+
+	if result.DeletedCount == 0 {
+		return 0, errors.New("not found")
 	}
 
 	return int(result.DeletedCount), nil

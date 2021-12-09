@@ -34,6 +34,7 @@ Use it *kappa*
   - validation check
   - Savety (login required)
   - Thinking about GraphQL O.o worth or not worth?
+  - Pagination?!
 4. Full CRUD for armor:
   - Same as weapons ... just with armor
 5. Full CRUD for accessories:

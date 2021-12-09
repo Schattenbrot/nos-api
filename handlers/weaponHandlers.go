@@ -101,12 +101,6 @@ func FindOneWeaponById(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		errorJSON(w, err, http.StatusNotFound)
 		config.App.Logger.Println(err)
-	}
-
-	if weapon == nil {
-		err = errors.New("the item does not exist")
-		errorJSON(w, err, http.StatusNotFound)
-		config.App.Logger.Println(err)
 		return
 	}
 
@@ -134,11 +128,15 @@ func UpdateWeaponById(w http.ResponseWriter, r *http.Request) {
 
 	result, err := config.App.Models.DB.UpdateOneWeaponById(id, updateWeapon)
 	if err != nil {
+		if err.Error() == "not found" {
+			errorJSON(w, err, http.StatusNotFound)
+			return
+		}
 		errorJSON(w, err, http.StatusInternalServerError)
 		return
 	}
 
-	err = writeJSON(w, http.StatusOK, result, "updated")
+	err = writeJSON(w, http.StatusNoContent, result, "updated")
 	if err != nil {
 		errorJSON(w, err, http.StatusInternalServerError)
 		config.App.Logger.Println(err)
@@ -155,6 +153,10 @@ func DeleteWeaponById(w http.ResponseWriter, r *http.Request) {
 
 	result, err := config.App.Models.DB.DeleteWeaponById(id)
 	if err != nil {
+		if err.Error() == "not found" {
+			errorJSON(w, err, http.StatusNotFound)
+			return
+		}
 		errorJSON(w, err, http.StatusInternalServerError)
 		return
 	}

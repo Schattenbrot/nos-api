@@ -90,12 +90,7 @@ func FindFairyById(w http.ResponseWriter, r *http.Request) {
 
 	fairy, err := config.App.Models.DB.FindFairyById(id)
 	if err != nil {
-		config.App.Logger.Println(err)
-	}
-
-	if fairy == nil {
-		err = errors.New("the item does not exist")
-		errorJSON(w, err, http.StatusNotFound)
+		errorJSON(w, err)
 		config.App.Logger.Println(err)
 		return
 	}
@@ -123,11 +118,15 @@ func UpdateFairyById(w http.ResponseWriter, r *http.Request) {
 
 	result, err := config.App.Models.DB.UpdateFairyById(id, updateFairy)
 	if err != nil {
+		if err.Error() == "not found" {
+			errorJSON(w, err, http.StatusNotFound)
+			return
+		}
 		errorJSON(w, err)
 		return
 	}
 
-	err = writeJSON(w, http.StatusOK, result, "updated")
+	err = writeJSON(w, http.StatusNoContent, result, "updated")
 	if err != nil {
 		config.App.Logger.Println(err)
 	}
@@ -143,11 +142,15 @@ func DeleteFairyById(w http.ResponseWriter, r *http.Request) {
 
 	result, err := config.App.Models.DB.DeleteFairyById(id)
 	if err != nil {
+		if err.Error() == "not found" {
+			errorJSON(w, err, http.StatusNotFound)
+			return
+		}
 		errorJSON(w, err)
 		return
 	}
 
-	err = writeJSON(w, http.StatusOK, result, "deleted")
+	err = writeJSON(w, http.StatusNoContent, result, "deleted")
 	if err != nil {
 		config.App.Logger.Println(err)
 	}

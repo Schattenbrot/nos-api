@@ -7,11 +7,12 @@ import (
 
 // writeJSON wraps the data in a custom wrapper and writes it to the page.
 func writeJSON(w http.ResponseWriter, status int, data interface{}, wrap string) error {
-	wrapper := make(map[string]interface{})
+	// wrapper := make(map[string]interface{})
 
-	wrapper[wrap] = data
+	// wrapper[wrap] = data
 
-	js, err := json.Marshal(wrapper)
+	// js, err := json.Marshal(wrapper)
+	js, err := json.Marshal(data)
 	if err != nil {
 		return err
 	}
