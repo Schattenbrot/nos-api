@@ -31,7 +31,7 @@ Use it *kappa*
   - Move handlers into handlers-module for better readability. (done, but no receiver anymore, moved config into config-module)
   - httprouter to chi (done)
   - Fix response messages to be more schemey. (done)
-  - validation check
+  - validation check (done)
   - Savety (login required)
   - Thinking about GraphQL O.o worth or not worth?
   - Pagination?!

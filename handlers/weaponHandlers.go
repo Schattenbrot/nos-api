@@ -3,10 +3,12 @@ package handlers
 import (
 	"encoding/json"
 	"errors"
+	"html/template"
 	"net/http"
 
 	"github.com/Schattenbrot/nos-api/config"
 	"github.com/Schattenbrot/nos-api/models"
+	"github.com/Schattenbrot/nos-api/validator"
 	"github.com/go-chi/chi"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -19,6 +21,21 @@ func InsertWeapon(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		errorJSON(w, err)
 		return
+	}
+
+	// Validation
+	// Validation
+	err = validator.WeaponValidation(weapon)
+	if err != nil {
+		errorJSON(w, err)
+		return
+	}
+	// Escape strings
+	for i := 0; i < len(weapon.Effects); i++ {
+		weapon.Effects[i] = template.HTMLEscapeString(weapon.Effects[i])
+	}
+	for i := 0; i < len(weapon.HowToGet); i++ {
+		weapon.HowToGet[i] = template.HTMLEscapeString(weapon.HowToGet[i])
 	}
 
 	type jsonResp struct {
@@ -68,6 +85,12 @@ func FindAllWeapons(w http.ResponseWriter, r *http.Request) {
 
 func FindAllWeaponsByProfession(w http.ResponseWriter, r *http.Request) {
 	profession := chi.URLParam(r, "profession")
+	if profession != "adventurer" && profession != "mage" && profession != "bowman" && profession != "swordsman" && profession != "martial-artist" {
+		err := errors.New("invalid profession parameter")
+		errorJSON(w, err, http.StatusBadRequest)
+		config.App.Logger.Println(err)
+		return
+	}
 
 	weapons, err := config.App.Models.DB.FindAllWeaponsByProfession(profession)
 	if err != nil {
